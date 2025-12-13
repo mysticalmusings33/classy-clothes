@@ -1,0 +1,57 @@
+<head>
+    <title>{{ shop.name }}</title>
+
+    <style>
+        /* ==================== CSS VARIABLES FROM SHOPIFY SETTINGS ==================== */
+        :root {
+            /* Colors from settings */
+            --color-primary: {{ settings.color_primary }};
+            --color-secondary: {{ settings.color_secondary }};
+            --color-accent: {{ settings.color_accent }};
+            --color-background: {{ settings.color_background }};
+            --color-light-gray: {{ settings.color_light_gray }};
+            --color-white: {{ settings.color_white }};
+
+            /* Typography from settings */
+            --font-heading: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+            --font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
+            --font-heading-weight: {{ settings.font_heading.weight }};
+            --font-body-weight: {{ settings.font_body.weight }};
+
+            /* Font sizes from settings */
+            --font-size-base: {{ settings.font_size_base }}px;
+            --font-size-h1: {{ settings.font_size_h1 }}px;
+            --font-size-h2: {{ settings.font_size_h2 }}px;
+
+            /* Spacing from settings */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: {{ settings.spacing_small }}px;
+            --spacing-md: {{ settings.spacing_medium }}px;
+            --spacing-lg: {{ settings.spacing_large }}px;
+            --spacing-xl: {{ settings.spacing_sections }}px;
+            --spacing-section-small: {{ settings.spacing_sections_small }}px;
+
+            /* Layout from settings */
+            --container-width: {{ settings.container_width }}px;
+
+            /* Button settings */
+            --button-border-radius: {{ settings.button_border_radius }}px;
+
+            /* Hero settings */
+            --hero-height-desktop: {{ settings.hero_height_desktop }}px;
+            --hero-height-mobile: {{ settings.hero_height_mobile }}px;
+            --hero-overlay-opacity: {{ settings.hero_overlay_opacity | divided_by: 100.0 }};
+
+            /* Fixed values */
+            --transition: all 0.3s ease;
+        }
+    </style>
+
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+    {{ content_for_header }}
+</head>
+
+<body>
+    {{ content_for_layout }}
+</body>

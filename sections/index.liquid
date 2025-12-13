@@ -1,0 +1,138 @@
+<!-- ==================== HERO SECTION ==================== -->
+<section class="hero">
+    <!-- Using a stock fashion image from Unsplash -->
+    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Fashion hero" class="hero-image">
+    <div class="hero-content">
+        <h1>Timeless Elegance</h1>
+        <p>Curated collections for the discerning wardrobe</p>
+        <a href="/collections/all" class="btn btn-light">Explore Collection</a>
+    </div>
+</section>
+
+<!-- ==================== FEATURED PRODUCTS ==================== -->
+<section class="featured-products section">
+    <div class="container">
+        <div class="section-header">
+        <h2>New Arrivals</h2>
+        <p>Discover our latest selections</p>
+        </div>
+
+        <div class="product-grid">
+        {% comment %}
+            This liquid code fetches the first 4 products from your store.
+            You can adjust the collection handle or limit as needed.
+        {% endcomment %}
+
+        {% for product in collections.all.products limit: 4 %}
+            <div class="product-card">
+            <a href="{{ product.url }}">
+                <div class="product-image-wrapper">
+                {% if product.featured_image %}
+                    <img src="{{ product.featured_image | img_url: '600x' }}"
+                        alt="{{ product.featured_image.alt | escape }}"
+                        class="product-image">
+                {% else %}
+                    <img src="https://via.placeholder.com/600x750/e8e8e6/666666?text=No+Image"
+                        alt="Placeholder"
+                        class="product-image">
+                {% endif %}
+                </div>
+
+                <div class="product-info">
+                {% if product.vendor != blank %}
+                    <div class="product-vendor">{{ product.vendor }}</div>
+                {% endif %}
+                <h3 class="product-title">{{ product.title }}</h3>
+                <div class="product-price">
+                    {% if product.compare_at_price > product.price %}
+                    <span class="compare-price">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                    <span>{{ product.price | money }}</span>
+                </div>
+                </div>
+            </a>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CATEGORY SHOWCASE ==================== -->
+<section class="category-showcase section">
+    <div class="container">
+        <div class="section-header">
+        <h2>Shop By Category</h2>
+        </div>
+
+        <div class="category-grid">
+        <a href="/collections/womens" class="category-card">
+            <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446" alt="Women's Collection" class="category-image">
+            <div class="category-overlay">
+            <h3 class="category-title">Women's</h3>
+            </div>
+        </a>
+
+        <a href="/collections/mens" class="category-card">
+            <img src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc" alt="Men's Collection" class="category-image">
+            <div class="category-overlay">
+            <h3 class="category-title">Men's</h3>
+            </div>
+        </a>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== BRAND STORY ==================== -->
+<section class="brand-story section">
+    <div class="container">
+        <div class="brand-content">
+        <h2>Crafted with Intention</h2>
+        <p>Every piece in our collection is selected for its exceptional quality, timeless design, and thoughtful construction. We believe in investing in fewer, better pieces that elevate your wardrobe and stand the test of time.</p>
+        <p>Our commitment to craftsmanship and sustainable practices ensures that each garment tells a story of care, from the finest materials to the hands that create them.</p>
+        <a href="/pages/about" class="btn">Our Story</a>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== VALUE PROPOSITIONS ==================== -->
+<section class="value-props section-small">
+    <div class="container">
+        <div class="value-grid">
+        <div class="value-item">
+            <div class="value-icon">✦</div>
+            <h3>Complimentary Shipping</h3>
+            <p>On all orders over $200</p>
+        </div>
+
+        <div class="value-item">
+            <div class="value-icon">↻</div>
+            <h3>Effortless Returns</h3>
+            <p>60-day return policy</p>
+        </div>
+
+        <div class="value-item">
+            <div class="value-icon">✓</div>
+            <h3>Exceptional Quality</h3>
+            <p>Curated with care</p>
+        </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== EMAIL SIGNUP ==================== -->
+<section class="email-signup section">
+    <div class="container">
+        <h2>Join Our Community</h2>
+        <p>Receive updates on new arrivals and exclusive offers</p>
+
+        <form class="email-form" action="/contact#newsletter" method="post">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email"
+                name="contact[email]"
+                class="email-input"
+                placeholder="Your email address"
+                required>
+        <button type="submit" class="btn btn-light">Subscribe</button>
+        </form>
+    </div>
+</section>
