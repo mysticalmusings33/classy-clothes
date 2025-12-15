@@ -1,0 +1,156 @@
+<!-- ==================== HEADER HTML STRUCTURE ==================== -->
+<header class="site-header">
+  <div class="header-container">
+
+    <!-- LOGO SECTION -->
+    <div class="site-logo">
+      <a href="/">
+        {% if section.settings.logo != blank %}
+          <!-- If logo image is uploaded in settings, display it -->
+          <img src="{{ section.settings.logo | img_url: '300x' }}"
+               alt="{{ shop.name }}"
+               loading="eager">
+        {% else %}
+          <!-- Fallback to text logo if no image uploaded -->
+          <span class="site-logo-text">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    <!-- DESKTOP NAVIGATION -->
+    <nav class="main-nav-wrapper">
+      <ul class="main-nav">
+        <li><a href="/collections/womens">Women</a></li>
+        <li><a href="/collections/mens">Men</a></li>
+        <li><a href="/collections/new-arrivals">New Arrivals</a></li>
+        <li><a href="/collections/sale">Sale</a></li>
+        <li><a href="/pages/about">About</a></li>
+      </ul>
+    </nav>
+
+    <!-- HEADER ICONS (Search, Account, Cart) -->
+    <div class="header-icons">
+      <!-- Search Icon -->
+      <a href="/search" class="header-icon" aria-label="Search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </a>
+
+      <!-- Account Icon -->
+      <a href="/account" class="header-icon" aria-label="Account">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </a>
+
+      <!-- Cart Icon with Count -->
+      <a href="/cart" class="header-icon" aria-label="Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        {% if cart.item_count > 0 %}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+
+      <!-- Mobile Menu Toggle (Hamburger) -->
+      <button class="mobile-menu-toggle"
+              aria-label="Open menu"
+              onclick="toggleMobileMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== MOBILE MENU ==================== -->
+<!-- Overlay - clicking it closes the menu -->
+<div class="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+
+<!-- Sliding menu panel -->
+<div class="mobile-menu">
+  <!-- Close button -->
+  <button class="mobile-menu-close"
+          aria-label="Close menu"
+          onclick="toggleMobileMenu()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <!-- Mobile navigation links -->
+  <ul class="mobile-nav">
+    <li><a href="/collections/womens">Women</a></li>
+    <li><a href="/collections/mens">Men</a></li>
+    <li><a href="/collections/new-arrivals">New Arrivals</a></li>
+    <li><a href="/collections/sale">Sale</a></li>
+    <li><a href="/pages/about">About</a></li>
+  </ul>
+
+  <!-- Mobile menu actions (search/account) -->
+  <div class="mobile-menu-actions">
+    <a href="/search" class="header-icon" aria-label="Search">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+    </a>
+
+    <a href="/account" class="header-icon" aria-label="Account">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<!-- ==================== JAVASCRIPT FOR MOBILE MENU ==================== -->
+<script>
+  /**
+   * Toggles the mobile menu open/closed
+   * Works by adding/removing 'active' class which triggers CSS transitions
+   */
+  function toggleMobileMenu() {
+    // Get references to menu elements
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+
+    // Toggle 'active' class on both elements
+    // When 'active' is added, CSS transforms trigger the slide animation
+    mobileMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+
+    // Prevent body scrolling when menu is open
+    if (mobileMenu.classList.contains('active')) {
+      document.body.style.overflow = 'hidden';  // Disable scrolling
+    } else {
+      document.body.style.overflow = '';        // Re-enable scrolling
+    }
+  }
+</script>
+
+<!-- ==================== SHOPIFY SECTION SCHEMA ==================== -->
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image",
+      "info": "Recommended size: 300x100px. Leave empty to show store name as text."
+    }
+  ]
+}
+{% endschema %}
