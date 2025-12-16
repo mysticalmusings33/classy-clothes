@@ -1,0 +1,585 @@
+<!-- Main product page with image gallery, options, and add to cart -->
+
+<style>
+  /* ==================== PRODUCT PAGE LAYOUT ==================== */
+
+  .product-page {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .product-main {
+    display: grid;
+    grid-template-columns: 3fr 2fr;  /* 60/40 split using fractions */
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* ==================== IMAGE GALLERY ==================== */
+
+  .product-gallery {
+    position: sticky;
+    top: 100px;  /* Sticks when scrolling, accounting for header height */
+    align-self: flex-start;
+  }
+
+  .product-main-image-wrapper {
+    position: relative;
+    padding-bottom: 125%;  /* 4:5 aspect ratio */
+    overflow: hidden;
+    background: var(--color-light-gray);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .product-main-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Thumbnail grid */
+  .product-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--spacing-sm);
+  }
+
+  .product-thumbnail {
+    position: relative;
+    padding-bottom: 100%;  /* Square thumbnails */
+    overflow: hidden;
+    background: var(--color-light-gray);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: var(--transition);
+  }
+
+  .product-thumbnail:hover {
+    border-color: var(--color-light-gray);
+  }
+
+  .product-thumbnail.active {
+    border-color: var(--color-primary);
+  }
+
+  .product-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ==================== PRODUCT DETAILS ==================== */
+
+  .product-details {
+    /*padding-left: var(--spacing-md);*/
+  }
+
+  .product-vendor {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.2;
+  }
+
+  .product-price {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
+  }
+
+  .product-price .compare-price {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: var(--spacing-sm);
+    font-size: 1.25rem;
+  }
+
+  /* ==================== PRODUCT OPTIONS (Pills) ==================== */
+
+  .product-option {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .product-option-label {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .option-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  /* Individual pill styling */
+  .option-pill {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--color-light-gray);
+    background: var(--color-white);
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    min-width: 60px;
+  }
+
+  .option-pill:hover {
+    border-color: var(--color-primary);
+  }
+
+  .option-pill.active {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+  }
+
+  .option-pill.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ==================== QUANTITY SELECTOR ==================== */
+
+  .product-quantity {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .quantity-label {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-light-gray);
+    width: fit-content;
+  }
+
+  .quantity-btn {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    color: var(--color-primary);
+    font-size: 1.125rem;
+    transition: var(--transition);
+  }
+
+  .quantity-btn:hover {
+    background: var(--color-light-gray);
+  }
+
+  .quantity-input {
+    border: none;
+    text-align: center;
+    width: 60px;
+    padding: 0.75rem 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-primary);
+  }
+
+  .quantity-input:focus {
+    outline: none;
+  }
+
+  /* Remove spinner arrows from number input */
+  .quantity-input::-webkit-inner-spin-button,
+  .quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* ==================== ADD TO CART BUTTON ==================== */
+
+  .product-add-to-cart {
+    width: 100%;
+    padding: 1.25rem 2rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--color-primary);
+    background: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .product-add-to-cart:hover {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+  }
+
+  .product-add-to-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Success message after adding to cart */
+  .cart-success-message {
+    display: none;
+    padding: var(--spacing-sm);
+    background: var(--color-light-gray);
+    color: var(--color-primary);
+    text-align: center;
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .cart-success-message.show {
+    display: block;
+  }
+
+  /* ==================== PRODUCT DESCRIPTION ==================== */
+
+  .product-description {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-light-gray);
+  }
+
+  .product-description h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .product-description p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 1024px) {
+    .product-main {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+
+    .product-gallery {
+      position: static;  /* Remove sticky on smaller screens */
+    }
+
+    .product-details {
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-title {
+      font-size: 2rem;
+    }
+
+    .product-price {
+      font-size: 1.25rem;
+    }
+
+    .product-thumbnails {
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-title {
+      font-size: 1.75rem;
+    }
+
+    .option-pills {
+      width: 100%;
+    }
+
+    .option-pill {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>
+
+<!-- ==================== PRODUCT PAGE HTML ==================== -->
+<div class="product-page">
+  <div class="container">
+    <div class="product-main">
+
+      <!-- LEFT SIDE: IMAGE GALLERY (60%) -->
+      <div class="product-gallery">
+        <!-- Main product image -->
+        <div class="product-main-image-wrapper">
+          <img id="main-product-image"
+               src="{{ product.featured_image | img_url: '1200x' }}"
+               alt="{{ product.title }}"
+               class="product-main-image">
+        </div>
+
+        <!-- Thumbnails (only show if multiple images) -->
+        {% if product.images.size > 1 %}
+          <div class="product-thumbnails">
+            {% for image in product.images %}
+              <div class="product-thumbnail {% if forloop.first %}active{% endif %}"
+                   onclick="changeMainImage('{{ image | img_url: '1200x' }}', this)">
+                <img src="{{ image | img_url: '200x' }}" alt="{{ product.title }}">
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT SIDE: PRODUCT DETAILS (40%) -->
+      <div class="product-details">
+
+        <!-- Vendor -->
+        {% if product.vendor != blank %}
+          <div class="product-vendor">{{ product.vendor }}</div>
+        {% endif %}
+
+        <!-- Title -->
+        <h1 class="product-title">{{ product.title }}</h1>
+
+        <!-- Price -->
+        <div class="product-price">
+          {% if product.compare_at_price > product.price %}
+            <span class="compare-price">{{ product.compare_at_price | money }}</span>
+          {% endif %}
+          <span id="product-price">{{ product.price | money }}</span>
+        </div>
+
+        <!-- Product Form -->
+        <form id="product-form" action="/cart/add" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="id" id="product-variant-id" value="{{ product.selected_or_first_available_variant.id }}">
+
+          <!-- Product Options (Size, Color, etc.) -->
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+              <div class="product-option">
+                <label class="product-option-label">{{ option.name }}</label>
+                <div class="option-pills">
+                  {% for value in option.values %}
+                    <button type="button"
+                            class="option-pill {% if forloop.first %}active{% endif %}"
+                            data-option-position="{{ option.position }}"
+                            data-value="{{ value | escape }}"
+                            onclick="selectOption(this, {{ option.position }}, '{{ value | escape }}')">
+                      {{ value }}
+                    </button>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          {% endunless %}
+
+          <!-- Quantity Selector -->
+          <div class="product-quantity">
+            <label class="quantity-label">Quantity</label>
+            <div class="quantity-selector">
+              <button type="button" class="quantity-btn" onclick="decrementQuantity()">−</button>
+              <input type="number"
+                     id="quantity"
+                     name="quantity"
+                     value="1"
+                     min="1"
+                     class="quantity-input"
+                     readonly>
+              <button type="button" class="quantity-btn" onclick="incrementQuantity()">+</button>
+            </div>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <button type="submit"
+                  class="product-add-to-cart"
+                  id="add-to-cart-btn"
+                  {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {% if product.selected_or_first_available_variant.available %}
+              Add to Cart
+            {% else %}
+              Sold Out
+            {% endif %}
+          </button>
+
+          <!-- Success Message -->
+          <div id="cart-success-message" class="cart-success-message">
+            Added to cart successfully!
+          </div>
+        </form>
+
+        <!-- Product Description -->
+        {% if product.description != blank %}
+          <div class="product-description">
+            <h3>Description</h3>
+            {{ product.description }}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+  // Store product data for variant selection
+  const productData = {{ product | json }};
+  let selectedOptions = {
+    {% for option in product.options_with_values %}
+      {{ option.position }}: "{{ option.values.first | escape }}"{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  };
+
+  /**
+   * Change main product image when clicking thumbnails
+   */
+  function changeMainImage(imageUrl, thumbnail) {
+    document.getElementById('main-product-image').src = imageUrl;
+
+    // Update active state on thumbnails
+    document.querySelectorAll('.product-thumbnail').forEach(thumb => {
+      thumb.classList.remove('active');
+    });
+    thumbnail.classList.add('active');
+  }
+
+  /**
+   * Handle option pill selection (size, color, etc.)
+   */
+  function selectOption(button, optionPosition, value) {
+    // Update selected options
+    selectedOptions[optionPosition] = value;
+
+    // Update active state for pills in this option group
+    const optionPills = button.parentElement.querySelectorAll('.option-pill');
+    optionPills.forEach(pill => pill.classList.remove('active'));
+    button.classList.add('active');
+
+    // Find matching variant and update form
+    updateVariant();
+  }
+
+  /**
+   * Find variant based on selected options and update UI
+   */
+  function updateVariant() {
+    // Find matching variant
+    const selectedVariant = productData.variants.find(variant => {
+      return Object.keys(selectedOptions).every(position => {
+        return variant[`option${position}`] === selectedOptions[position];
+      });
+    });
+
+    if (selectedVariant) {
+      // Update hidden variant ID input
+      document.getElementById('product-variant-id').value = selectedVariant.id;
+
+      // Update price
+      const priceElement = document.getElementById('product-price');
+      priceElement.textContent = formatMoney(selectedVariant.price);
+
+      // Update add to cart button
+      const addToCartBtn = document.getElementById('add-to-cart-btn');
+      if (selectedVariant.available) {
+        addToCartBtn.disabled = false;
+        addToCartBtn.textContent = 'Add to Cart';
+      } else {
+        addToCartBtn.disabled = true;
+        addToCartBtn.textContent = 'Sold Out';
+      }
+    }
+  }
+
+  /**
+   * Quantity selector functions
+   */
+  function incrementQuantity() {
+    const input = document.getElementById('quantity');
+    input.value = parseInt(input.value) + 1;
+  }
+
+  function decrementQuantity() {
+    const input = document.getElementById('quantity');
+    if (parseInt(input.value) > 1) {
+      input.value = parseInt(input.value) - 1;
+    }
+  }
+
+  /**
+   * Format price in cents to currency
+   */
+  function formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  /**
+   * Handle add to cart form submission
+   */
+  document.getElementById('product-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    try {
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        // Show success message
+        const successMsg = document.getElementById('cart-success-message');
+        successMsg.classList.add('show');
+
+        // Hide after 3 seconds
+        setTimeout(() => {
+          successMsg.classList.remove('show');
+        }, 3000);
+
+        // Update cart count in header (if you have one)
+        // You can add this functionality later
+      } else {
+        alert('Error adding to cart. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error adding to cart. Please try again.');
+    }
+  });
+</script>
+
+<!-- ==================== SCHEMA ==================== -->
+{% schema %}
+{
+  "name": "Product Page",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Main product page with image gallery, options, and add to cart functionality."
+    }
+  ]
+}
+{% endschema %}
