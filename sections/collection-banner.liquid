@@ -1,0 +1,153 @@
+<!-- Displays collection title, description, and optional featured image -->
+
+<style>
+  /* ==================== COLLECTION BANNER ==================== */
+
+  .collection-banner {
+    position: relative;
+    /*margin-bottom: var(--spacing-xl);*/
+  }
+
+  /* Banner with image */
+  .collection-banner-with-image {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--color-light-gray);
+  }
+
+  .collection-banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;  /* Subtle background effect */
+  }
+
+  .collection-banner-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: var(--spacing-lg);
+  }
+
+  .collection-banner-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-primary);
+  }
+
+  .collection-banner-content .collection-description {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--color-primary);
+    opacity: 0.9;
+  }
+
+  /* Banner without image - simpler layout */
+  .collection-banner-simple {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+  }
+
+  .collection-banner-simple h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .collection-banner-simple .collection-description {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #666;
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 1024px) {
+    .collection-banner-with-image {
+      height: 350px;
+    }
+
+    .collection-banner-content h1 {
+      font-size: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .collection-banner-with-image {
+      height: 300px;
+    }
+
+    .collection-banner-content h1,
+    .collection-banner-simple h1 {
+      font-size: 2.5rem;
+    }
+
+    .collection-banner-content .collection-description,
+    .collection-banner-simple .collection-description {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .collection-banner-content h1,
+    .collection-banner-simple h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<!-- ==================== BANNER HTML ==================== -->
+<div class="collection-banner">
+  {% if collection.image %}
+    <!-- Banner with featured image -->
+    <div class="collection-banner-with-image">
+      <img src="{{ collection.image | img_url: '1600x' }}"
+           alt="{{ collection.title }}"
+           class="collection-banner-image"
+           loading="eager">
+
+      <div class="collection-banner-content">
+        <h1>{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <div class="collection-description">
+            {{ collection.description }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <!-- Simple banner without image -->
+    <div class="container">
+      <div class="collection-banner-simple">
+        <h1>{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <div class="collection-description">
+            {{ collection.description }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- ==================== SCHEMA ==================== -->
+{% schema %}
+{
+  "name": "Collection Banner",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "The collection image and description are managed in the collection settings. Go to Products > Collections to edit."
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,469 @@
+{% comment %} Displays products with filtering, sorting, and pagination {% endcomment %}
+
+<style>
+  /* ==================== COLLECTION TOOLBAR ==================== */
+
+  .collection-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-light-gray);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  .collection-product-count {
+    font-size: 0.875rem;
+    color: #666;
+    letter-spacing: 0.05em;
+  }
+
+  .collection-filters {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+  }
+
+  /* ==================== FILTER & SORT DROPDOWNS ==================== */
+
+  .filter-group {
+    position: relative;
+  }
+
+  .filter-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  .filter-select {
+    appearance: none;
+    background: var(--color-white);
+    border: 1px solid var(--color-light-gray);
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 180px;
+  }
+
+  .filter-select:hover {
+    border-color: var(--color-primary);
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  /* Custom dropdown arrow */
+  .filter-group::after {
+    content: '↓';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+  }
+
+  /* ==================== PRODUCT GRID ==================== */
+
+  .collection-products {
+    padding: var(--spacing-md) 0;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Product card styles */
+  .product-card {
+    position: relative;
+    text-align: center;
+  }
+
+  .product-image-wrapper {
+    position: relative;
+    padding-bottom: 125%;  /* 4:5 aspect ratio */
+    overflow: hidden;
+    background: var(--color-light-gray);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+
+  /* Product info */
+  .product-vendor {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin-bottom: 0.25rem;
+  }
+
+  .product-title {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+  }
+
+  .product-price {
+    font-size: 1rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .product-price .compare-price {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 0.5rem;
+  }
+
+  /* View Product button - subtle and classy */
+  .product-view-btn {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--color-light-gray);
+    color: var(--color-primary);
+    background: transparent;
+    opacity: 0;  /* Hidden by default */
+    transition: var(--transition);
+  }
+
+  .product-card:hover .product-view-btn {
+    opacity: 1;  /* Appears on hover */
+    border-color: var(--color-primary);
+  }
+
+  .product-view-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  /* ==================== PAGINATION ==================== */
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+  }
+
+  .pagination-item {
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--color-light-gray);
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    transition: var(--transition);
+  }
+
+  .pagination-item:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .pagination-item.active {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .pagination-item.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* ==================== EMPTY STATE ==================== */
+
+  .collection-empty {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+  }
+
+  .collection-empty h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .collection-empty p {
+    color: #666;
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 1024px) {
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-md);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .collection-toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .collection-filters {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .filter-select {
+      width: 100%;
+    }
+
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-sm);
+    }
+
+    .product-view-btn {
+      opacity: 1;  /* Always visible on mobile */
+    }
+  }
+
+  @media (max-width: 480px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<!-- ==================== COLLECTION PRODUCTS HTML ==================== -->
+{% paginate collection.products by 24 %}
+
+<div class="collection-products">
+  <div class="container">
+
+    <!-- Toolbar with filters and sorting -->
+    <div class="collection-toolbar">
+      <div class="collection-product-count">
+        {{ collection.products_count }}
+        {% if collection.products_count == 1 %}
+          Product
+        {% else %}
+          Products
+        {% endif %}
+      </div>
+
+      <div class="collection-filters">
+        <!-- Product Type Filter -->
+        <div class="filter-group">
+          <label class="filter-label" for="filter-type">Filter</label>
+          <select id="filter-type" class="filter-select" onchange="filterProducts(this)">
+            <option value="">All Products</option>
+            {% assign product_types = collection.products | map: 'type' | uniq %}
+            {% for product_type in product_types %}
+              {% if product_type != blank %}
+                <option value="{{ product_type | handleize }}">{{ product_type }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Sort Dropdown -->
+        <div class="filter-group">
+          <label class="filter-label" for="sort-by">Sort By</label>
+          <select id="sort-by" class="filter-select" onchange="sortProducts(this)">
+            <option value="manual">Featured</option>
+            <option value="best-selling">Best Selling</option>
+            <option value="title-ascending">Alphabetically, A-Z</option>
+            <option value="title-descending">Alphabetically, Z-A</option>
+            <option value="price-ascending">Price, Low to High</option>
+            <option value="price-descending">Price, High to Low</option>
+            <option value="created-descending">Date, New to Old</option>
+            <option value="created-ascending">Date, Old to New</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    {% if collection.products.size > 0 %}
+      <div class="products-grid">
+        {% for product in collection.products %}
+          <div class="product-card" data-product-type="{{ product.type | handleize }}">
+            <a href="{{ product.url }}" class="product-link">
+              <div class="product-image-wrapper">
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: '600x' }}"
+                       alt="{{ product.featured_image.alt | escape }}"
+                       class="product-image"
+                       loading="lazy">
+                {% else %}
+                  <img src="https://via.placeholder.com/600x750/e8e8e6/666666?text=No+Image"
+                       alt="Placeholder"
+                       class="product-image"
+                       loading="lazy">
+                {% endif %}
+              </div>
+
+              <div class="product-info">
+                {% if product.vendor != blank %}
+                  <div class="product-vendor">{{ product.vendor }}</div>
+                {% endif %}
+
+                <h3 class="product-title">{{ product.title }}</h3>
+
+                <div class="product-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="compare-price">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                  <span>{{ product.price | money }}</span>
+                </div>
+
+                <!-- Subtle view button that appears on hover -->
+                <span class="product-view-btn">View Details</span>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if paginate.pages > 1 %}
+        <div class="pagination">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}" class="pagination-item">
+              ← Previous
+            </a>
+          {% else %}
+            <span class="pagination-item disabled">← Previous</span>
+          {% endif %}
+
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+              <a href="{{ part.url }}" class="pagination-item">{{ part.title }}</a>
+            {% else %}
+              {% if part.title == paginate.current_page %}
+                <span class="pagination-item active">{{ part.title }}</span>
+              {% else %}
+                <span class="pagination-item">{{ part.title }}</span>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}" class="pagination-item">
+              Next →
+            </a>
+          {% else %}
+            <span class="pagination-item disabled">Next →</span>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    {% else %}
+      <!-- Empty state -->
+      <div class="collection-empty">
+        <h3>No products found</h3>
+        <p>This collection is currently empty.</p>
+        <a href="/collections/all" class="btn">Shop All Products</a>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endpaginate %}
+
+<!-- ==================== JAVASCRIPT FOR FILTERING & SORTING ==================== -->
+<script>
+  /**
+   * Filter products by type
+   * Hides/shows products based on their data-product-type attribute
+   */
+  function filterProducts(select) {
+    const filterValue = select.value;
+    const products = document.querySelectorAll('.product-card');
+
+    products.forEach(product => {
+      const productType = product.getAttribute('data-product-type');
+
+      if (filterValue === '' || productType === filterValue) {
+        product.style.display = 'block';  // Show product
+      } else {
+        product.style.display = 'none';   // Hide product
+      }
+    });
+  }
+
+  /**
+   * Sort products by redirecting to collection URL with sort parameter
+   * Shopify handles the actual sorting on the backend
+   */
+  function sortProducts(select) {
+    const sortValue = select.value;
+    const url = new URL(window.location.href);
+
+    // Add or update sort_by parameter
+    if (sortValue && sortValue !== 'manual') {
+      url.searchParams.set('sort_by', sortValue);
+    } else {
+      url.searchParams.delete('sort_by');
+    }
+
+    // Redirect to sorted URL
+    window.location.href = url.toString();
+  }
+
+  /**
+   * Maintain selected sort option on page load
+   */
+  document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sortBy = urlParams.get('sort_by');
+
+    if (sortBy) {
+      const sortSelect = document.getElementById('sort-by');
+      if (sortSelect) {
+        sortSelect.value = sortBy;
+      }
+    }
+  });
+</script>
+
+<!-- ==================== SCHEMA ==================== -->
+{% schema %}
+{
+  "name": "Collection Product Grid",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Displays products with filtering and sorting options. Products are paginated at 24 per page."
+    }
+  ]
+}
+{% endschema %}
