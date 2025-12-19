@@ -7,19 +7,15 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
-  "sections": {
-    "collection-banner": {
-      "type": "collection-banner",
-      "settings": {}
+ {
+    "sections": {
+      "main-page": {
+        "type": "page-template",
+        "settings": {}
+      }
     },
-    "main-collection": {
-      "type": "main-collection-product-grid",
-      "settings": {}
-    }
-  },
-  "order": [
-    "collection-banner",
-    "main-collection"
-  ]
-}
+    "order": [
+      "main-page"
+    ]
+  }
+  

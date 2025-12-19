@@ -1,0 +1,259 @@
+<!-- 
+  Save as: /sections/about-team.liquid
+  Team section with member blocks
+-->
+
+<style>
+  /* ==================== TEAM SECTION ==================== */
+  
+  .about-team {
+    padding: var(--spacing-xl) 0;
+    background: var(--color-white);
+  }
+  
+  .team-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-lg);
+  }
+  
+  .team-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .team-header p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #666;
+  }
+  
+  /* Team grid */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+  
+  .team-member {
+    text-align: center;
+  }
+  
+  .team-member-image-wrapper {
+    position: relative;
+    padding-bottom: 125%;  /* 4:5 portrait ratio */
+    overflow: hidden;
+    background: var(--color-light-gray);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .team-member-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+  }
+  
+  .team-member:hover .team-member-image {
+    transform: scale(1.05);
+  }
+  
+  .team-member-name {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .team-member-role {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .team-member-bio {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #666;
+  }
+  
+  /* ==================== RESPONSIVE ==================== */
+  
+  @media (max-width: 1024px) {
+    .team-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .team-header h2 {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-md);
+    }
+    
+    .team-header h2 {
+      font-size: 1.75rem;
+    }
+    
+    .team-header p {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .team-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<!-- ==================== TEAM HTML ==================== -->
+<section class="about-team">
+  <div class="container">
+    
+    <!-- Section header -->
+    <div class="team-header">
+      {% if section.settings.heading != blank %}
+        <h2>{{ section.settings.heading }}</h2>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <p>{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+    
+    <!-- Team grid -->
+    {% if section.blocks.size > 0 %}
+      <div class="team-grid">
+        {% for block in section.blocks %}
+          <div class="team-member" {{ block.shopify_attributes }}>
+            <div class="team-member-image-wrapper">
+              {% if block.settings.image %}
+                <img src="{{ block.settings.image | img_url: '600x' }}" 
+                     alt="{{ block.settings.name }}"
+                     class="team-member-image"
+                     loading="lazy">
+              {% else %}
+                <!-- Placeholder from Unsplash for team member photos -->
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=750&fit=crop" 
+                     alt="{{ block.settings.name }}"
+                     class="team-member-image"
+                     loading="lazy">
+              {% endif %}
+            </div>
+            
+            {% if block.settings.name != blank %}
+              <h3 class="team-member-name">{{ block.settings.name }}</h3>
+            {% endif %}
+            
+            {% if block.settings.role != blank %}
+              <div class="team-member-role">{{ block.settings.role }}</div>
+            {% endif %}
+            
+            {% if block.settings.bio != blank %}
+              <p class="team-member-bio">{{ block.settings.bio }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+<!-- ==================== SCHEMA ==================== -->
+{% schema %}
+{
+  "name": "Team",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Meet Our Team"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "The talented people behind our brand."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "team_member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Recommended size: 600x750px. Leave empty for placeholder."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Jane Doe"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role",
+          "default": "Creative Director"
+        },
+        {
+          "type": "textarea",
+          "id": "bio",
+          "label": "Bio",
+          "default": "A brief description about this team member."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Team",
+      "blocks": [
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Jane Doe",
+            "role": "Founder & Creative Director"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "John Smith",
+            "role": "Head of Design"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Emily Chen",
+            "role": "Marketing Director"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Michael Brown",
+            "role": "Operations Manager"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

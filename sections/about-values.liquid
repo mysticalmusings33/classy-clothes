@@ -1,0 +1,207 @@
+<!-- 
+  Save as: /sections/about-values.liquid
+  Values/Mission section with customizable blocks
+-->
+
+<style>
+  /* ==================== VALUES SECTION ==================== */
+  
+  .about-values {
+    padding: var(--spacing-xl) 0;
+    background: var(--color-background);
+  }
+  
+  .values-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-lg);
+  }
+  
+  .values-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .values-header p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #666;
+  }
+  
+  /* Values grid */
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+  
+  .value-item {
+    text-align: center;
+    padding: var(--spacing-lg);
+  }
+  
+  .value-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-secondary);
+  }
+  
+  .value-item h3 {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .value-item p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #666;
+  }
+  
+  /* ==================== RESPONSIVE ==================== */
+  
+  @media (max-width: 1024px) {
+    .values-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .values-header h2 {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+    
+    .values-header h2 {
+      font-size: 1.75rem;
+    }
+    
+    .values-header p {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<!-- ==================== VALUES HTML ==================== -->
+<section class="about-values">
+  <div class="container">
+    
+    <!-- Section header -->
+    <div class="values-header">
+      {% if section.settings.heading != blank %}
+        <h2>{{ section.settings.heading }}</h2>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <p>{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+    
+    <!-- Values grid -->
+    {% if section.blocks.size > 0 %}
+      <div class="values-grid">
+        {% for block in section.blocks %}
+          <div class="value-item" {{ block.shopify_attributes }}>
+            {% if block.settings.icon != blank %}
+              <div class="value-icon">{{ block.settings.icon }}</div>
+            {% endif %}
+            
+            {% if block.settings.title != blank %}
+              <h3>{{ block.settings.title }}</h3>
+            {% endif %}
+            
+            {% if block.settings.text != blank %}
+              <p>{{ block.settings.text }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+<!-- ==================== SCHEMA ==================== -->
+{% schema %}
+{
+  "name": "Values / Mission",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Values"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "The principles that guide everything we do."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "info": "Use a single emoji or symbol (e.g., ✦, ♥, ★)",
+          "default": "✦"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Quality"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "We never compromise on the quality of our materials or craftsmanship."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Values / Mission",
+      "blocks": [
+        {
+          "type": "value",
+          "settings": {
+            "icon": "✦",
+            "title": "Quality",
+            "text": "We never compromise on the quality of our materials or craftsmanship."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon": "♥",
+            "title": "Sustainability",
+            "text": "Every piece is created with respect for our planet and future generations."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon": "★",
+            "title": "Timelessness",
+            "text": "We design pieces that transcend trends and remain relevant for years to come."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

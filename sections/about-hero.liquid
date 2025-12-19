@@ -1,0 +1,142 @@
+<!-- 
+  Hero banner for About page with image and intro text
+-->
+
+<style>
+  /* ==================== ABOUT HERO ==================== */
+  
+  .about-hero {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--color-light-gray);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .about-hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+  }
+  
+  .about-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: var(--spacing-lg);
+  }
+  
+  .about-hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-primary);
+    letter-spacing: 0.03em;
+  }
+  
+  .about-hero-content p {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: var(--color-primary);
+    opacity: 0.9;
+  }
+  
+  /* ==================== RESPONSIVE ==================== */
+  
+  @media (max-width: 1024px) {
+    .about-hero {
+      height: 450px;
+    }
+    
+    .about-hero-content h1 {
+      font-size: 3.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .about-hero {
+      height: 400px;
+    }
+    
+    .about-hero-content h1 {
+      font-size: 2.5rem;
+    }
+    
+    .about-hero-content p {
+      font-size: 1.125rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .about-hero {
+      height: 350px;
+    }
+    
+    .about-hero-content h1 {
+      font-size: 2rem;
+    }
+    
+    .about-hero-content p {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<!-- ==================== HERO HTML ==================== -->
+<section class="about-hero">
+  {% if section.settings.hero_image %}
+    <img src="{{ section.settings.hero_image | img_url: '1800x' }}" 
+         alt="{{ section.settings.hero_heading }}"
+         class="about-hero-image"
+         loading="eager">
+  {% endif %}
+  
+  <div class="about-hero-content">
+    {% if section.settings.hero_heading != blank %}
+      <h1>{{ section.settings.hero_heading }}</h1>
+    {% endif %}
+    
+    {% if section.settings.hero_text != blank %}
+      <p>{{ section.settings.hero_text }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ==================== SCHEMA ==================== -->
+{% schema %}
+{
+  "name": "About Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image",
+      "info": "Recommended size: 1800x600px"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero Heading",
+      "default": "About Us"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_text",
+      "label": "Hero Text",
+      "default": "Discover our story and the passion behind every piece we create."
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Hero"
+    }
+  ]
+}
+{% endschema %}
