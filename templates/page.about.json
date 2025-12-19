@@ -9,12 +9,190 @@
  */
 {
   "sections": {
-    "main-page": {
-      "type": "index",
-      "settings": {}
+    "about-hero": {
+      "type": "about-hero",
+      "settings": {
+        "hero_image": "shopify://shop_images/man-in-suit-on-stairs.jpg",
+        "hero_heading": "About Us",
+        "hero_text": "Discover our story and the passion behind every piece we create."
+      }
+    },
+    "about-brand-story": {
+      "type": "about-brand-story",
+      "settings": {
+        "heading": "Our Story",
+        "text": "<p>Share your brand's story and values here. What makes you unique? What drives your passion?</p>",
+        "image": "shopify://shop_images/a-pile-of-denim-jeans-in-different-shades-of-blue.jpg",
+        "image_position": "left"
+      }
+    },
+    "about_values_mn6D4n": {
+      "type": "about-values",
+      "blocks": {
+        "value_MHgm6y": {
+          "type": "value",
+          "settings": {
+            "icon": "✦",
+            "title": "Quality",
+            "text": "We never compromise on the quality of our materials or craftsmanship."
+          }
+        },
+        "value_QmBRkK": {
+          "type": "value",
+          "settings": {
+            "icon": "♥",
+            "title": "Sustainability",
+            "text": "Every piece is created with respect for our planet and future generations."
+          }
+        },
+        "value_F9FExD": {
+          "type": "value",
+          "settings": {
+            "icon": "★",
+            "title": "Timelessness",
+            "text": "We design pieces that transcend trends and remain relevant for years to come."
+          }
+        }
+      },
+      "block_order": [
+        "value_MHgm6y",
+        "value_QmBRkK",
+        "value_F9FExD"
+      ],
+      "name": "Values / Mission",
+      "settings": {
+        "heading": "Our Values",
+        "subheading": "The principles that guide everything we do."
+      }
+    },
+    "about_team_NE6zzN": {
+      "type": "about-team",
+      "blocks": {
+        "team_member_8U46kF": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/model-in-sunglasses-and-summer-clothes.jpg",
+            "name": "Jane Doe",
+            "role": "Founder & Creative Director",
+            "bio": "A brief description about this team member."
+          }
+        },
+        "team_member_ck6p9e": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/black-and-white-portrait-mens-fashion.jpg",
+            "name": "John Smith",
+            "role": "Head of Design",
+            "bio": "A brief description about this team member."
+          }
+        },
+        "team_member_XRPHcc": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/model-with-leather-jacket-over-shoulders.jpg",
+            "name": "Emily Chen",
+            "role": "Marketing Director",
+            "bio": "A brief description about this team member."
+          }
+        },
+        "team_member_dfwMbR": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/casual-mens-fashion.jpg",
+            "name": "Michael Brown",
+            "role": "Operations Manager",
+            "bio": "A brief description about this team member."
+          }
+        }
+      },
+      "block_order": [
+        "team_member_8U46kF",
+        "team_member_ck6p9e",
+        "team_member_XRPHcc",
+        "team_member_dfwMbR"
+      ],
+      "name": "Team",
+      "settings": {
+        "heading": "Meet Our Team",
+        "subheading": "The talented people behind our brand."
+      }
+    },
+    "about_image_gallery_G7eNE8": {
+      "type": "about-image-gallery",
+      "blocks": {
+        "image_7TiwE9": {
+          "type": "image",
+          "settings": {
+            "caption": ""
+          }
+        },
+        "image_CYkqLM": {
+          "type": "image",
+          "settings": {
+            "caption": ""
+          }
+        },
+        "image_RYUNrh": {
+          "type": "image",
+          "settings": {
+            "caption": ""
+          }
+        },
+        "image_9YLecR": {
+          "type": "image",
+          "settings": {
+            "caption": ""
+          }
+        },
+        "image_cwjCFx": {
+          "type": "image",
+          "settings": {
+            "caption": ""
+          }
+        },
+        "image_M8fKrq": {
+          "type": "image",
+          "settings": {
+            "caption": ""
+          }
+        },
+        "image_a3PYzH": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/casual-urban-menswear.jpg",
+            "caption": ""
+          }
+        },
+        "image_VU49mk": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/man-poses-in-light-colored-overcoat.jpg",
+            "caption": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_7TiwE9",
+        "image_CYkqLM",
+        "image_RYUNrh",
+        "image_9YLecR",
+        "image_cwjCFx",
+        "image_M8fKrq",
+        "image_a3PYzH",
+        "image_VU49mk"
+      ],
+      "name": "Image Gallery",
+      "settings": {
+        "heading": "Our Studio",
+        "subheading": "A glimpse into our creative space and process."
+      }
     }
   },
   "order": [
-    "main-page"
+    "about-hero",
+    "about-brand-story",
+    "about_values_mn6D4n",
+    "about_team_NE6zzN",
+    "about_image_gallery_G7eNE8"
   ]
-}  
+}
