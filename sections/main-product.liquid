@@ -550,17 +550,10 @@
       });
 
       if (response.ok) {
-        // Show success message
-        const successMsg = document.getElementById('cart-success-message');
-        successMsg.classList.add('show');
-
-        // Hide after 3 seconds
-        setTimeout(() => {
-          successMsg.classList.remove('show');
-        }, 3000);
-
-        // Update cart count in header (if you have one)
-        // You can add this functionality later
+        // Open cart drawer automatically after adding
+        if (typeof window.openCartDrawerAfterAdd === 'function') {
+          window.openCartDrawerAfterAdd();
+        }
       } else {
         alert('Error adding to cart. Please try again.');
       }
