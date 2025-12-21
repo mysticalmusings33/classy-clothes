@@ -1,0 +1,11 @@
+<div id="cart-container">
+    {% if cart.items.size > 0 %}
+        {% for item in cart.items %}
+            <div class="item">
+                <h2>{{ item.title }}</h2>
+                <img src="{{ item | image_url: width: 100, height: 100, crop: 'center' }}" alt="{{ item.title }}">
+                <p>{{ item.quantity }} - {{ item.final_line_price | money_with_currency }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
