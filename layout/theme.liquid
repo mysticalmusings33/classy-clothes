@@ -49,6 +49,7 @@
 
     {{ 'theme.css' | asset_url | stylesheet_tag }}
     {{ 'header.css' | asset_url | stylesheet_tag }}
+    {{ 'footer.css' | asset_url | stylesheet_tag }}
 
     {{ content_for_header }}
 </head>
@@ -58,5 +59,6 @@
 
     {{ content_for_layout }}
 
+    {% section 'footer' %}
     {% section 'cart-drawer' %}
 </body>
