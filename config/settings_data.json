@@ -15,9 +15,23 @@
     "sections": {
       "header": {
         "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
         "settings": {
-          "logo": "shopify://shop_images/classy-brown-chicken.jpg"
+          "tagline": "Timeless elegance for the modern wardrobe.",
+          "show_social": true,
+          "social_instagram": "",
+          "social_facebook": "",
+          "social_twitter": "",
+          "social_pinterest": "",
+          "show_payment_icons": true
         }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
       }
     },
     "content_for_index": []
